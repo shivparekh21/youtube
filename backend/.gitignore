@@ -1,0 +1,15 @@
+# Ignore specific files in the backend directory
+backend/config.yml              # Ignore a specific config file
+backend/logs/                   # Ignore the entire logs directory
+backend/temp/                   # Ignore temporary files directory
+backend/*.log                   # Ignore all log files in backend root
+backend/**/temp/                # Ignore any temp folder within subdirectories
+backend/src/main/resources/application.properties
+
+# Ignore compiled files
+backend/target/                 # Ignore Maven target directory
+backend/build/                  # Ignore Gradle build directory
+
+# Ignore sensitive files
+backend/.env                    # Ignore environment variable files
+backend/credentials.json        # Ignore credentials or secret files
