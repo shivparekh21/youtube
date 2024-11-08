@@ -1,5 +1,7 @@
 package com.example.youtube_clone.controller;
 
+import com.example.youtube_clone.dto.UploadVideoResponse;
+import com.example.youtube_clone.dto.VideoDto;
 import com.example.youtube_clone.model.Video;
 import com.example.youtube_clone.service.S3Service;
 import com.example.youtube_clone.service.VideoService;
@@ -16,9 +18,23 @@ public class VideoController {
 
     private final VideoService videoService;
 
+    // Upload Video and set videoUrl
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void uploadVideo(@RequestParam ("file") MultipartFile file) {
-        videoService.uploadVideo(file);
+    public UploadVideoResponse uploadVideo(@RequestParam ("file") MultipartFile file) {
+        return videoService.uploadVideo(file);
+    }
+
+    // Upload Thumbnail
+    @PostMapping("/thumbnail")
+    @ResponseStatus(HttpStatus.CREATED)
+    public String uploadThumbnail(@RequestParam ("file") MultipartFile file, @RequestParam("videoId") String videoId) {
+        return videoService.uploadThumbnail(file, videoId);
+    }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    public VideoDto editVideoMetadata(@RequestBody VideoDto videoDto) {
+        return videoService.editVideo(videoDto);
     }
 }
