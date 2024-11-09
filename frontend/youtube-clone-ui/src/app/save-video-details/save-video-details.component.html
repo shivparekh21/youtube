@@ -20,8 +20,34 @@
           <mat-option value="PUBLIC">PUBLIC</mat-option>
           <mat-option value="PRIVATE">PRIVATE</mat-option>
         </mat-select>
+      </mat-form-field><br>
+
+      <mat-form-field class="example-chip-list">
+        <mat-label>Tags</mat-label>
+        <mat-chip-grid #chipGrid aria-label="Enter tags">
+          @for (tag of tags; track tag) {
+            <mat-chip-row
+              (removed)="remove(tag)"
+              [editable]="true"
+            >
+              {{tag}}
+              <button matChipRemove [attr.aria-label]="'remove ' + tag">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip-row>
+          }
+          <input
+            placeholder="New tag..."
+            [matChipInputFor]="chipGrid"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="addOnBlur"
+            (matChipInputTokenEnd)="add($event)"
+          />
+        </mat-chip-grid>
       </mat-form-field>
-      <button type="submit" mat-raised-button color="primary">Save</button>
+
+      <div><button type="submit" mat-raised-button color="primary">Save</button></div>
+
     </form>
   </div>
 
