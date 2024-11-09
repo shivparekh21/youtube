@@ -3,6 +3,7 @@ import {NgxFileDropEntry, FileSystemFileEntry, FileSystemDirectoryEntry, NgxFile
 import { CommonModule } from '@angular/common';
 import {MatButton} from '@angular/material/button';
 import {VideoService} from '../video.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-upload-video',
@@ -18,11 +19,12 @@ import {VideoService} from '../video.service';
 
 
 export class UploadVideoComponent {
+
   public files: NgxFileDropEntry[] = [];
   fileUploaded: boolean = false;
   fileEntry: FileSystemFileEntry | undefined;
 
-  constructor(private videoService: VideoService){
+  constructor(private videoService: VideoService, private router: Router){
   }
 
   public dropped(files: NgxFileDropEntry[]) {
@@ -78,7 +80,8 @@ export class UploadVideoComponent {
 
       this.fileEntry.file( file => {
         this.videoService.uploadVideo(file).subscribe( data => {
-          console.log("Video Uploaded successfully")
+          //After we receive success message of video upload, we navigate to save-video-details component also(html of it)
+          this.router.navigateByUrl("/save-video-details/"+ data.videoId);
         })
       })
     }
