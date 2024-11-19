@@ -16,6 +16,7 @@ import {ActivatedRoute} from '@angular/router';
 import {VideoService} from '../video.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {NgIf} from '@angular/common';
+import {VideoPlayerComponent} from '../video-player/video-player.component';
 
 @Component({
   selector: 'app-save-video-details',
@@ -34,6 +35,7 @@ import {NgIf} from '@angular/common';
     MatIcon,
     MatChipInput,
     NgIf,
+    VideoPlayerComponent,
   ],
   templateUrl: './save-video-details.component.html',
   styleUrl: './save-video-details.component.css'
@@ -48,12 +50,17 @@ export class SaveVideoDetailsComponent {
   selectedFileName = '';
   videoId = '';
   fileSelected = false;
+  videoUrl!: string;
+
   private _snackBar = inject(MatSnackBar);
   // creating a form group and binding it to ../../component.html
   saveVideoDetailsForm: FormGroup;
-  constructor(private activatedRoute: ActivatedRoute, private videoService: VideoService) {
 
+  constructor(private activatedRoute: ActivatedRoute, private videoService: VideoService) {
     this.videoId= this.activatedRoute.snapshot.params['videoId'];
+    this.videoService.getVideo(this.videoId).subscribe(data => {
+      this.videoUrl = data.videoUrl;
+    })
     this.saveVideoDetailsForm = new FormGroup({
       title: this.title,
       description: this.description,

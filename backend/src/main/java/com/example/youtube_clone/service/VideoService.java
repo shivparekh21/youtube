@@ -55,13 +55,27 @@ public class VideoService {
         Video savedVideoThumbnail = getVideoById(videoId);
         String thumbnailUrl = s3Service.uploadFile(file);
         savedVideoThumbnail.setThumbnailUrl(thumbnailUrl);
-        videoRepository.save(savedVideoThumbnail);
 
+        videoRepository.save(savedVideoThumbnail);
         return thumbnailUrl;
     }
 
     public Video getVideoById(String videoId) {
         return videoRepository.findById(videoId)
                 .orElseThrow(()-> new IllegalArgumentException("Video not found"+ videoId));
+    }
+
+    public VideoDto getVideoDetails(String videoId) {
+        Video savedVideo = getVideoById(videoId);
+        VideoDto videoDto = new VideoDto();
+        videoDto.setThumbnailUrl(savedVideo.getThumbnailUrl());
+        videoDto.setTitle(savedVideo.getTitle());
+        videoDto.setDescription(savedVideo.getDescription());
+        videoDto.setId(savedVideo.getId());
+        videoDto.setVideoStatus(savedVideo.getVideoStatus());
+        videoDto.setTags(savedVideo.getTags());
+        videoDto.setVideoUrl(savedVideo.getVideoUrl());
+
+        return videoDto;
     }
 }
