@@ -17,6 +17,7 @@ import {VideoService} from '../video.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {NgIf} from '@angular/common';
 import {VideoPlayerComponent} from '../video-player/video-player.component';
+import {VideoDto} from '../video-dto';
 
 @Component({
   selector: 'app-save-video-details',
@@ -51,6 +52,7 @@ export class SaveVideoDetailsComponent {
   videoId = '';
   fileSelected = false;
   videoUrl!: string;
+  thumbnailUrl!: string;
 
   private _snackBar = inject(MatSnackBar);
   // creating a form group and binding it to ../../component.html
@@ -60,6 +62,7 @@ export class SaveVideoDetailsComponent {
     this.videoId= this.activatedRoute.snapshot.params['videoId'];
     this.videoService.getVideo(this.videoId).subscribe(data => {
       this.videoUrl = data.videoUrl;
+      this.thumbnailUrl = data.thumbnailUrl;
     })
     this.saveVideoDetailsForm = new FormGroup({
       title: this.title,
@@ -107,5 +110,21 @@ export class SaveVideoDetailsComponent {
         console.log(data);
         this._snackBar.open("Thumbnail Uploaded", "Ok");
       })
+  }
+
+  // call the video service to make a http call to backend
+  saveVideo() {
+    const videoMetaData: VideoDto = {
+      "id": this.videoId,
+      "title": this.saveVideoDetailsForm.get('title')?.value,
+      "description": this.saveVideoDetailsForm.get('description')?.value,
+      "tags": this.tags,
+      "videoStatus": this.saveVideoDetailsForm.get('videoStatus')?.value,
+      "videoUrl": this.videoUrl,
+      "thumbnailUrl": this.thumbnailUrl,
+    }
+    this.videoService.saveVideo(videoMetaData).subscribe(data => {
+      this._snackBar.open("Video MetaData updated successfully", "OK");
+    })
   }
 }
